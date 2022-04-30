@@ -37,8 +37,12 @@ function App() {
                 element={<Privateroute element={<InitialDashboard />} />}
               />
               <Route
-                path="manage-class"
+                path="core-modules/manage-class"
                 element={<Privateroute element={<ManageClass />} />}
+              />
+              <Route
+                path="core-modules/students"
+                element={<Privateroute element={<Students />} />}
               />
               <Route
                 path="feedback"
@@ -50,11 +54,7 @@ function App() {
               />
               <Route
                 path="schedule"
-                element={<Privateroute element={<Schedule/>} />}
-              />
-              <Route
-                path="students"
-                element={<Privateroute element={<Students />} />}
+                element={<Privateroute element={<Schedule />} />}
               />
             </Route>
             {/* error 404 */}

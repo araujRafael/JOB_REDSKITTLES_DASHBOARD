@@ -1,11 +1,16 @@
-import React, { useContext } from "react";
-import { Navigate } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Contexts/AuthContext";
+import { Login } from "../../pages/Login";
 
 export function Privateroute({ element }) {
   const { authenticate } = useContext(AuthContext);
-  if (!authenticate) {
-    return <Navigate to="/" />;
+  const nav = useNavigate();
+
+  if (authenticate) {
+    return element;
+  } else {
+    nav("/");
+    return <Login />;
   }
-  return element;
 }

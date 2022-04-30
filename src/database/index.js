@@ -36,11 +36,7 @@ export async function readDocInDb(col) {
 // Sub
 export async function addSubDocInDb(col, id, sub, data) {
   try {
-    const docRef = await db
-      .collection(col)
-      .doc(id)
-      .collection(sub)
-      .add(data);
+    const docRef = await db.collection(col).doc(id).collection(sub).add(data);
     return docRef;
   } catch (error) {
     console.error("Error adding subDoc document: ", error);
@@ -66,7 +62,7 @@ export async function deleteSubDocInDb(col, colId, sub, id) {
       .doc(colId)
       .collection(sub)
       .doc(id)
-      .delete()
+      .delete();
     return docRef;
   } catch (error) {
     console.error("Error update subDoc document: ", error);

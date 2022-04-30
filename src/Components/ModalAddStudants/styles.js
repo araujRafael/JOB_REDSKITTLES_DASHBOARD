@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import themes from '../../themes/themes.json'
+import styled from "styled-components";
+import themes from "../../themes/themes.json";
 
 export const WrapperModal = styled.div`
   width: 100%;
@@ -9,7 +9,7 @@ export const WrapperModal = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: row;
-`
+`;
 
 export const DisplayContainer = styled.div`
   /* background: #009; */
@@ -21,7 +21,7 @@ export const DisplayContainer = styled.div`
   align-items: center;
   flex-direction: column;
 
-  img{
+  img {
     width: 75%;
     height: 75%;
   }
@@ -33,10 +33,12 @@ export const FormContainer = styled.div`
   height: 100%;
 
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-`
+
+  margin: 20px;
+`;
 
 export const WrapperForm = styled.div`
   /* background: #009; */
@@ -49,25 +51,25 @@ export const WrapperForm = styled.div`
   flex-direction: column;
   gap: 20px;
 
-  small{
+  small {
     color: red;
   }
 
-  h1{
+  h1 {
     font-weight: 400;
     color: ${themes.color};
   }
-  button{
-    background: ${themes['dark-second-color']};
+  button {
+    background: ${themes["dark-second-color"]};
     border: none;
     width: 100%;
-    padding: 15px ;
+    padding: 15px;
     font-size: 1.2rem;
     border-radius: 6px;
     color: ${themes.bg};
     cursor: pointer;
   }
-`
+`;
 export const Form = styled.form`
   /* background-color: #009; */
   width: 100%;
@@ -80,7 +82,7 @@ export const Form = styled.form`
 
   gap: 15px;
 
-  .wrap-input{
+  .wrap-input {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -88,24 +90,25 @@ export const Form = styled.form`
     flex-direction: column;
     gap: 5px;
 
-    input,select{
+    input,
+    select {
       background: ${themes.bg};
       width: 100%;
       padding: 10px;
       border-radius: 6px;
-      border: solid 1px ${themes['primary-color']};
+      border: solid 1px ${themes["primary-color"]};
     }
-    option{
+    option {
       font-size: 1.2rem;
       line-height: 40px;
     }
   }
 
-  button{
-    background: ${themes['dark-primary-color']};
+  button {
+    background: ${themes["dark-primary-color"]};
     border: none;
     width: 100%;
-    padding: 15px ;
+    padding: 15px;
     font-size: 1.2rem;
     border-radius: 6px;
     color: ${themes.bg};
@@ -117,4 +120,4 @@ export const Form = styled.form`
     flex-direction: row;
     gap: 30px;
   }
-`
+`;

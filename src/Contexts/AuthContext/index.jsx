@@ -2,10 +2,9 @@ import React, { createContext, useState } from "react";
 //
 import firebase from "firebase/app";
 import { addDocInDb, readDocInDb, db } from "../../database";
-import { toast, Zoom } from "react-toastify";
+import { toast } from "react-toastify";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import { sign, verify } from "jsonwebtoken";
-// import { verifyJWT, createJWT } from "../../Hooks/jwt";
 // Config
 const secret_jwt = process.env.REACT_APP_SECRET_JWT;
 const ONE_DAY = 604800;
@@ -16,10 +15,10 @@ export const AuthContext = createContext();
 export function AuthContextProvider({ children }) {
   const [userGoogle, setUserGoogle] = useState(null);
   const [authenticate, setAuthenticate] = useState(false);
+  const [authError, setAuthError] = useState(false);
 
   //Effects
   React.useEffect(() => {
-    verifyIsAuthenticated()
     // console.log(userGoogle);
     const unSubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -29,6 +28,7 @@ export function AuthContextProvider({ children }) {
           name: displayName,
           avatar: photoURL ? photoURL : "",
         }); //setUser
+        setAuthenticate(true);
       }
     }); //OnAuthStateChange
 
@@ -38,41 +38,6 @@ export function AuthContextProvider({ children }) {
   }, []);
 
   // Hooks
-  const verifyIsAuthenticated = React.useCallback(() => {
-    const cookies = parseCookies(null)[KEY_TOKEN];
-    if (!cookies) {
-      return;
-    }
-    try {
-      const jwtObj = verifyJWT(cookies);
-      const userid = jwtObj["user_id"];
-      if (!jwtObj) {
-        setAuthenticate(false);
-        return;
-      }
-      // Consult database
-      (async () => {
-        const adminRef = db.collection("users").get();
-        const snap = (await adminRef).docs;
-        snap.find((doc) => {
-          let { id, name, avatar } = doc.data();
-          if (id === userid) {
-            setUserGoogle({
-              id,
-              name,
-              avatar,
-            });
-            setAuthenticate(true);
-            return;
-          } else {
-            setAuthenticate(false);
-          }
-        });
-      })();
-    } catch (err) {
-      toast(err);
-    }
-  },[verifyJWT,parseCookies,userGoogle]);
 
   function createJWT(id) {
     return sign({ user_id: id }, secret_jwt, { algorithm: "HS512" });
@@ -89,14 +54,12 @@ export function AuthContextProvider({ children }) {
       .signOut()
       .catch((err) => console.log(err));
     setUserGoogle(null);
+    setAuthenticate(false);
   }
 
   async function handleLoginEmailPass(dataForm) {
     const { email, password, rememberLogin } = dataForm;
 
-    if (rememberLogin) {
-      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
-    }
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -116,7 +79,7 @@ export function AuthContextProvider({ children }) {
               avatar: "",
             };
             setUserGoogle(loginUser);
-            if(rememberLogin){
+            if (rememberLogin) {
               const token = createJWT(uid);
               setCookie(null, KEY_TOKEN, token, {
                 maxAge: ONE_DAY,
@@ -124,16 +87,19 @@ export function AuthContextProvider({ children }) {
               });
             }
             setAuthenticate(true);
+            // return;
           })
           .catch((err) => {
             toast(err);
+            setAuthError(true);
             return;
-          })
+          });
       })
       .catch((error) => {
         // Handle Errors here
         console.log(error);
         setAuthenticate(false);
+        setAuthError(true);
         toast(error.message);
       });
   }
@@ -166,7 +132,10 @@ export function AuthContextProvider({ children }) {
               setAuthenticate(true);
               return userAdd;
             })
-            .catch((err) => toast(err));
+            .catch((err) => {
+              toast(err);
+              setAuthError(true);
+            });
         });
     } // persiste session
 
@@ -190,6 +159,7 @@ export function AuthContextProvider({ children }) {
         // Handle Errors here
         console.log(error);
         setAuthenticate(false);
+        setAuthError(true);
         toast("Error on create user");
       });
   }
@@ -253,6 +223,7 @@ export function AuthContextProvider({ children }) {
         // Handle Errors here
         console.log(error);
         setAuthenticate(false);
+        setAuthError(true);
         toast(error.message);
       });
   }
@@ -263,6 +234,8 @@ export function AuthContextProvider({ children }) {
         logOut,
         userGoogle,
         authenticate,
+        authError,
+        setAuthError,
         handleLoginEmailPass,
         createUserEmailPass,
         signinWithGoogle,

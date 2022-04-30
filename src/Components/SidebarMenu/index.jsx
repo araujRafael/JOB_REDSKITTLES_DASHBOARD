@@ -21,9 +21,11 @@ export default function SidebarMenu() {
   //
   const location = useLocation();
   let isSameRoute = (route) => (location.pathname === route ? "inRoute" : "");
+  let isCoreModRoute = () =>
+    /core-modules/gi.test(location.pathname) ? " inRoute " : "";
 
   return (
-    <SideMenu className={OPEN_MENU && "isOpen"}>
+    <SideMenu className={OPEN_MENU ? "isOpen" : ""}>
       <div className="head-menu">
         <CgMenu onClick={() => SET_OPEN_MENU(!OPEN_MENU)} />
       </div>
@@ -43,22 +45,31 @@ export default function SidebarMenu() {
           </li>
           {/* Sub folder */}
           <LiSubFolder
-            className={("li-sub-folder ", OPEN_MENU && "isOpen")}
+            className={
+              (" li-sub-folder ",
+              OPEN_MENU ? " isOpen " : "" + isCoreModRoute())
+            }
             onClick={() => SET_OPEN_CORE_MODULES(!OPEN_CORE_MODULES)}
           >
-            <a className={OPEN_MENU && "isOpen"}>
+            <a className={OPEN_MENU ? "isOpen" : ""}>
               <IoFolderOpenOutline />
+              <p className="name-list core-list">Core Modules</p>
             </a>
             <div className={"sub-folder"}>
-              <SubFolder className={OPEN_MENU && "isOpen"}>
-                <li className={isSameRoute("/dashboard/manage-class")}>
-                  <Link to={"manage-class"}>
+              <SubFolder className={OPEN_MENU ? "isOpen" : ""}>
+                <p className="title-subfolder">Core Modules</p>
+                <li
+                  className={isSameRoute(
+                    "/dashboard/core-modules/manage-class"
+                  )}
+                >
+                  <Link to={"core-modules/manage-class"}>
                     <SiGoogleclassroom className="icon-sub-folder" />
                     <p>Manage Class</p>
                   </Link>
                 </li>
-                <li className={isSameRoute("/dashboard/students")}>
-                  <Link to={"students"}>
+                <li className={isSameRoute("/dashboard/core-modules/students")}>
+                  <Link to={"core-modules/students"}>
                     <BsFileEarmarkPerson className="icon-sub-folder" />
                     <p>Students</p>
                   </Link>

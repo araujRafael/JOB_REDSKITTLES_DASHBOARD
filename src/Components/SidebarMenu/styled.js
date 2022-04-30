@@ -12,6 +12,18 @@ export const SubFolder = styled.div`
   top: 15px;
   left: 75px;
 
+  padding: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .title-subfolder {
+    display: block;
+    color: ${themes["dark-primary-color"]};
+  }
+
   &.isOpen {
     position: relative;
     top: 0;
@@ -22,6 +34,10 @@ export const SubFolder = styled.div`
     visibility: visible;
     box-shadow: none;
     background: none;
+
+    .title-subfolder {
+      display: none;
+    }
   }
 `;
 export const LiSubFolder = styled.div`
@@ -36,6 +52,12 @@ export const LiSubFolder = styled.div`
   flex-direction: row;
   gap: 10px;
   cursor: pointer;
+
+  &.inRoute {
+    a {
+      color: ${themes["inRoute"]};
+    }
+  }
 
   &.isOpen {
     display: flex;
@@ -121,6 +143,10 @@ export const SideMenu = styled.div`
         cursor: pointer;
       }
     }
+  }
+
+  .core-list {
+    display: none;
   }
 
   .list-menu {
@@ -219,6 +245,10 @@ export const SideMenu = styled.div`
   &.isOpen {
     transition: all 0.5s ease;
     min-width: 200px;
+
+    .core-list {
+      display: block;
+    }
 
     .list-menu {
       ul {
